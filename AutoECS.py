@@ -171,7 +171,10 @@ def map_network_drives():
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
-    output.insert(END, " MAPEAR UNIDADES DE RED\n")
+    output.insert(END, " Mapeando unidades de red...\n")
+    os.system("net use X: \\MASTERS\drivers /persistent:no")
+    output.insert(END, "\n ######## COMPLETADO ########")
+
 #Create a button to call map_network_drives
 map_network_drives_button = Button(submenu_frame, text="Mapear unidades", command=map_network_drives)
 map_network_drives_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
