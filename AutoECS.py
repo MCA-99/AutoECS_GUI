@@ -173,6 +173,7 @@ def map_network_drives():
     output.insert(END, "\n")
     output.insert(END, " Mapeando unidades de red...\n")
     os.system("net use X: \\MASTERS\drivers /persistent:no")
+    os.system("net use Z: \\MASTERS\informes /persistent:no");
     output.insert(END, "\n ######## COMPLETADO ########")
 
 #Create a button to call map_network_drives
