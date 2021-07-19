@@ -172,8 +172,12 @@ def map_network_drives():
     output.delete('1.0', END)
     output.insert(END, "\n")
     output.insert(END, " Mapeando unidades de red...\n")
-    os.system("net use X: \\MASTERS\drivers /persistent:no")
-    output.insert(END, "\n ######## COMPLETADO ########")
+    command1 = os.system("net use X: \\\\MASTERS\\drivers /persistent:no")
+    command2 = os.system("net use Z: \\\\MASTERS\\informes /persistent:no")
+    if (command1 | command2) == 2:
+        output.insert(END, "\n No se puede conectar con el servidor, o las unidades ya estan mapeadas...", "fail")
+    elif (command1 | command2) == 0:
+        output.insert(END, "\n ######## COMPLETADO ########", "success")
 
 #Create a button to call map_network_drives
 map_network_drives_button = Button(submenu_frame, text="Mapear unidades", command=map_network_drives)
@@ -192,7 +196,11 @@ def unmap_network_drives():
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
-    output.insert(END, " DESMAPEAR UNIDADES DE RED\n")
+    output.insert(END, " Desmapeando unidades de red...\n")
+    command = os.system("net use * /delete /y")
+    if command == 0:
+        output.insert(END, "\n ######## COMPLETADO ########", "success")
+        
 #Create a button to call map_network_drives
 unmap_network_drives_button = Button(submenu_frame, text="Desmapear unidades", command=unmap_network_drives)
 unmap_network_drives_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
