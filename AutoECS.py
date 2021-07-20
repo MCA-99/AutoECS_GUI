@@ -171,14 +171,33 @@ def map_network_drives():
     output.insert(END, "\n")
     output.insert(END, " Mapeando unidades de red...\n")
     try:
-        command1 = os.system("net use X: \\\\MASTERS\\drivers /persistent:no")
-        command2 = os.system("net use Z: \\\\MASTERS\\informes /persistent:no")
-        if (command1 | command2) == 0:
-            output.insert(END, "\n ######## COMPLETADO ########", "success")
-        elif (command1 | command2) != 0:
-             raise Exception()
+        output.insert(END, "\n Conectando con x:\\\\Masters\drivers\\", "warning")
+        command1 = os.system('net use X: \\\\MASTERS\\drivers /persistent:no')
+        if command1 == 0:
+            output.insert(END, "\n OK!", "success")
+            pass
+        else:
+            raise Exception()
     except:
-        output.insert(END, "\n No se puede conectar con el servidor, o las unidades ya estan mapeadas...", "fail")
+        output.insert(END, "\n No se puede conectar con \\\\Masters\drivers\\ o la unidad ya esta mapeada", "fail")
+        return
+    try:
+        output.insert(END, "\n Conectando con z:\\\\Masters\informes\\", "warning")
+        command2 = os.system('net use Z: \\\\MASTERS\\informes /persistent:no')
+        if command2 == 0:
+            output.insert(END, "\n OK!", "success")
+            pass
+        else:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se puede conectar con \\\\Masters\informes\\ o la unidad ya esta mapeada", "fail")
+        return
+
+    if (command1 & command2) == 0:
+        output.insert(END, "\n\n ######## COMPLETADO ########", "success")
+    else:
+        output.insert(END, "\n No se ha podido mapear las unidades de red", "fail")
+
 #Create a button to call map_network_drives
 map_network_drives_button = Button(submenu_frame, text="Mapear unidades", command=map_network_drives)
 map_network_drives_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
@@ -196,13 +215,14 @@ def unmap_network_drives():
     output.insert(END, "\n")
     output.insert(END, " Desmapeando unidades de red...\n")
     try:
-        command = os.system("net use * /delete /y")
+        command = os.system('net use * /delete /y')
         if command == 0:
-            output.insert(END, "\n ######## COMPLETADO ########", "success")
+            output.insert(END, "\n OK!", "success")
+            output.insert(END, "\n\n ######## COMPLETADO ########", "success")
         elif command != 0:
             raise Exception()
     except:
-        output.insert(END, "\n No se puede desmapear las unidades de red...", "fail")
+        output.insert(END, "\n No se puede desmapear las unidades de red", "fail")
 #Create a button to call map_network_drives
 unmap_network_drives_button = Button(submenu_frame, text="Desmapear unidades", command=unmap_network_drives)
 unmap_network_drives_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
@@ -220,31 +240,33 @@ def update_sys_time():
     output.insert(END, "\n")
     output.insert(END, " Actualizando la Hora del Sistema...\n")
     try:
-        try:
-            output.insert(END, "\n Comprobando si el servicio de tiempo esta iniciado...", "warning")
-            command1 = os.system("net start w32time")
-            if command1 == 0:
-                pass
-            else:
-                raise Exception()
-        except:
-            output.insert(END, "\n No se puede comprobar si el servicio de tiempo se puede iniciar...", "fail")
-        try:
-            output.insert(END, "\n Sincronizando hora con el servidor time.windows.com...", "warning")
-            command2 = os.system("w32tm /resync")
-            if command2 == 0:
-                pass
-            else:
-                raise Exception()
-        except:
-            output.insert(END, "\n No se puede sincronizar la hora con el servidor...", "fail")
-
-        if (command1 | command2) == 0:
-            output.insert(END, "\n\n ######## COMPLETADO ########", "success")
-        elif (command1 | command2) != 0:
-             raise Exception()
+        output.insert(END, "\n Comprobando si el servicio de tiempo esta iniciado...", "warning")
+        command1 = os.system('net start w32time')
+        if command1 == 0:
+            output.insert(END, "\n OK!", "success")
+            pass
+        else:
+            raise Exception()
     except:
-        output.insert(END, "\n\n No se puede actualizar la hora del sistema", "fail")
+        output.insert(END, "\n No se puede comprobar si el servicio de tiempo esta iniciado", "fail")
+        return
+    try:
+        output.insert(END, "\n Sincronizando hora con el servidor time.windows.com...", "warning")
+        command2 = os.system('w32tm /resync')
+        if command2 == 0:
+            output.insert(END, "\n OK!", "success")
+            pass
+        else:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se puede sincronizar la hora con el servidor...", "fail")
+        return
+
+    if (command1 & command2) == 0:
+        output.insert(END, "\n\n ######## COMPLETADO ########", "success")
+    else:
+        output.insert(END, "\n No se ha podido actualizar la hora del sistema", "fail")
+
 #Create a button to call map_network_drives
 update_sys_time_button = Button(submenu_frame, text="Actualizar Hora", command=update_sys_time)
 update_sys_time_button.config(width=20, height=2, bg="#EFA554", highlightthickness=0, activebackground='#FFB86C', cursor="center_ptr")
@@ -254,13 +276,52 @@ update_sys_time_button.place(x=20, y=124)
 This section create a button to call a function that open install system updates
 @mca 16/07/2021
 """
-# This function call wumpt to update system
+# This function moves WUMT into pc and open to update system
 def update_sys():
     log_mode()
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
     output.insert(END, " Actualizando el sistema...\n")
+    try:
+        output.insert(END, "\n Moviendo WUMT al equipo...", "warning")
+        command1 = os.system('copy ""X:\\programas\\wumt.exe"" """"')
+        if command1 == 0:
+            output.insert(END, "\n OK!", "success")
+            pass
+        else:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se ha podido mover el WUMT al equipo", "fail")
+        return
+    try:
+        output.insert(END, "\n Abriendo WUMT...", "warning")
+        command2 = os.system('wumt.exe')
+        if command2 == 0:
+            output.insert(END, "\n OK!", "success")
+            pass
+        else:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se puede abrir el WUMT", "fail")
+        return
+    try:
+        output.insert(END, "\n Limpiando...", "warning")
+        command3 = os.system('del ""wumt.exe""')
+        if command3 == 0:
+            output.insert(END, "\n OK!", "success")
+            pass
+        else:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se ha podido efectuar la limpieza", "fail")
+        return
+
+    if (command1 & command2 & command3) == 0:
+        output.insert(END, "\n\n ######## COMPLETADO ########", "success")
+    else:
+        output.insert(END, "\n No se ha podido actualizar el sistema", "fail")
+
 #Create a button to call map_network_drives
 update_sys_button = Button(submenu_frame, text="Actualizar el sistema", command=update_sys)
 update_sys_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
@@ -276,7 +337,16 @@ def activate_sys():
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
-    output.insert(END, " ACTIVAR EL SISTEMA\n")
+    output.insert(END, " Abriendo la ventana de activación del sistema...\n")
+    try:
+        command = os.system('start ms-settings:activation')
+        if command == 0:
+            output.insert(END, "\n OK!", "success")
+            output.insert(END, "\n\n ######## COMPLETADO ########", "success")
+        elif command != 0:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se ha podido abrir la ventana de activación del sistema", "fail")
 #Create a button to call map_network_drives
 activate_sys_button = Button(submenu_frame, text="Activar el sistema", command=activate_sys)
 activate_sys_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
@@ -292,7 +362,16 @@ def open_device_manager():
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
-    output.insert(END, " INSTALAR DRIVERS\n")
+    output.insert(END, " Abriendo el administrador de dispositivos...\n")
+    try:
+        command = os.system('devmgmt.msc')
+        if command == 0:
+            output.insert(END, "\n OK!", "success")
+            output.insert(END, "\n\n ######## COMPLETADO ########", "success")
+        elif command != 0:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se ha podido abrir el administrador de dispositivos", "fail")
 #Create a button to call map_network_drives
 open_device_manager_button = Button(submenu_frame, text="Instalar Drivers", command=open_device_manager)
 open_device_manager_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
@@ -308,7 +387,16 @@ def open_disk_manager():
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
-    output.insert(END, " COMRPOBAR PARTICIONES\n")
+    output.insert(END, " Abriendo el gestor de particiones...\n")
+    try:
+        command = os.system('diskmgmt.msc')
+        if command == 0:
+            output.insert(END, "\n OK!", "success")
+            output.insert(END, "\n\n ######## COMPLETADO ########", "success")
+        elif command != 0:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se ha podido abrir el gestor de particiones", "fail")
 #Create a button to call map_network_drives
 open_disk_manager_button = Button(submenu_frame, text="Comprobar particiones", command=open_disk_manager)
 open_disk_manager_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
