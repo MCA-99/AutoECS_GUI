@@ -121,8 +121,8 @@ def auto():
     open_device_manager()
     open_disk_manager()
     update_sys()
-    activate_sys()
     bit()
+    activate_sys()
     unmap_network_drives()
 # Create a button to call the auto mode function
 path_auto_icon = path.abspath(path.join(path.dirname(__file__), 'icon/auto.png'))
