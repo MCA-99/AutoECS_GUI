@@ -6,6 +6,7 @@ import os
 import tkinter as tk
 from tkinter import *
 import tkinter.font as font
+from tkinter import simpledialog
 
 """
 This section create the instance of the main window and configure it
@@ -285,7 +286,7 @@ def update_sys():
     output.insert(END, " Actualizando el sistema...\n")
     try:
         output.insert(END, "\n Moviendo WUMT al equipo...", "warning")
-        command1 = os.system('copy ""X:\\programas\\wumt.exe"" """"')
+        command1 = os.system('copy ""X:\\programas\\wumt.exe"" "".""')
         if command1 == 0:
             output.insert(END, "\n OK!", "success")
             pass
@@ -412,7 +413,65 @@ def bit():
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
-    output.insert(END, " BIT\n")
+    output.insert(END, " Abriendo BurnInTest...\n")
+    try:
+        output.insert(END, "\n Moviendo BIT al equipo...", "warning")
+        command1 = os.system('Xcopy /E /I /Y ""X:\\programas\\BurnInTest"" ""BurnInTest""')
+        if command1 == 0:
+            output.insert(END, "\n OK!", "success")
+            pass
+        else:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se ha podido mover el BIT al equipo", "fail")
+        return
+    try:
+        output.insert(END, "\n Abriendo el BIT...", "warning")
+        command2 = os.system('.\\BurninTest\\bit.exe /c .\\BurninTest\\config.bitcfg /r""')
+        if command2 == 0:
+            output.insert(END, "\n OK!", "success")
+            pass
+        else:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se ha podido abrir el BIT", "fail")
+    try:
+        output.insert(END, "\n Renombrando el informe...", "warning")
+        num_serie = simpledialog.askstring(title="Numero de Seria", prompt="Introduce el numero de serie del equipo:")
+        command3 = os.system('MOVE c:\informe.htm c:\"' + num_serie + '".htm')
+        if command3 == 0:
+            output.insert(END, "\n OK!", "success")
+            pass
+        else:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se ha cambiar el nombre al informe", "fail")
+    try:
+        output.insert(END, "\n Moviendo el informe a z:\\\\Masters\informes\\...", "warning")
+        command4 = os.system('move "'+num_serie+'".htm Z:')
+        if command4 == 0:
+            output.insert(END, "\n OK!", "success")
+            pass
+        else:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se ha podido mover el informe a z:\\\\Masters\informes\\", "fail")
+    try:
+        output.insert(END, "\n Limpiando...", "warning")
+        command5 = os.system('rmdir /Q /S ""BurnInTest""')
+        if command5 == 0:
+            output.insert(END, "\n OK!", "success")
+            pass
+        else:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se ha podido efectuar la limpieza", "fail")
+    
+    if (command1 & command2 & command3 & command4 & command5) == 0:
+        output.insert(END, "\n\n ######## COMPLETADO ########", "success")
+    else:
+        output.insert(END, "\n No se ha podido hacer el proceso de BurnInTest", "fail")
+
 #Create a button to call map_network_drives
 bit_button = Button(submenu_frame, text="BurnInTest", command=bit)
 bit_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
