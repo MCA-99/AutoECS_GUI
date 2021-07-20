@@ -3,6 +3,7 @@ Import tkinter
 @mca 13/07/2021
 """
 import os
+from os import path
 import ctypes
 import tkinter as tk
 from tkinter import *
@@ -12,7 +13,8 @@ from tkinter import messagebox
 
 root = tk.Tk()
 root.title("AutoECS")
-root.call('wm', 'iconphoto', root._w, PhotoImage(file='favicon.png'))
+path_root_icon = path.abspath(path.join(path.dirname(__file__), 'icon/favicon.png'))
+root.call('wm', 'iconphoto', root._w, PhotoImage(file=path_root_icon))
 root.geometry("1280x720")
 root.config(bg="#1d1f26")
 root.resizable(0,0)
@@ -123,7 +125,8 @@ def auto():
     bit()
     unmap_network_drives()
 # Create a button to call the auto mode function
-auto_icon = PhotoImage(file="auto.png")
+path_auto_icon = path.abspath(path.join(path.dirname(__file__), 'icon/auto.png'))
+auto_icon = PhotoImage(file=path_auto_icon)
 auto_font = font.Font(family="Verdana", size=16)
 auto_button = Button(menu_frame, text="Modo Automático", image=auto_icon, compound=LEFT, font=auto_font, command=auto)
 auto_button.pack(padx=50, pady=25)
@@ -141,7 +144,8 @@ def actions_menu():
     if submenu_frame_width == 450:
         submenu_frame.config(width=1, height=1)
 # Create a button to call the actions menu function
-actions_menu_button_icon = PhotoImage(file="actions.png")
+path_actions_icon = path.abspath(path.join(path.dirname(__file__), 'icon/actions.png'))
+actions_menu_button_icon = PhotoImage(file=path_actions_icon)
 actions_submenu_button_font = font.Font(family="Verdana", size=9)
 actions_menu_button_font = font.Font(family="Verdana", size=16)
 actions_menu_button = Button(menu_frame, text=" Acciones", image=actions_menu_button_icon, compound=LEFT, font=actions_menu_button_font ,command=actions_menu)
@@ -467,7 +471,8 @@ This section create a button to show the help in the output
 @mca 13/07/2021
 """
 # Create a button to show the help in the output
-help_button_icon = PhotoImage(file="help.png")
+path_help_icon = path.abspath(path.join(path.dirname(__file__), 'icon/help.png'))
+help_button_icon = PhotoImage(file=path_help_icon)
 help_button_font = font.Font(family="Verdana", size=16)
 help_button = Button(menu_frame, text="Ayuda", command=help_mode)
 help_button.pack()
@@ -479,7 +484,8 @@ This section create a button to exit the program
 @mca 13/07/2021
 """
 # Create a button to exit the program
-exit_button_icon = PhotoImage(file="exit.png")
+path_exit_icon = path.abspath(path.join(path.dirname(__file__), 'icon/exit.png'))
+exit_button_icon = PhotoImage(file=path_exit_icon)
 exit_button_font = font.Font(family="Verdana", size=16)
 exit_button = Button(menu_frame, text="Salir", command=root.destroy)
 exit_button.pack()
