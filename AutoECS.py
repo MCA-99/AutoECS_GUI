@@ -165,20 +165,20 @@ This section create a button to call a function that map network drives
 """
 # This function map network drives
 def map_network_drives():
-    # Cambia el titulo del log
     log_mode()
-    # Cambia el contenido del log y ejecuta comandos
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
     output.insert(END, " Mapeando unidades de red...\n")
-    command1 = os.system("net use X: \\\\MASTERS\\drivers /persistent:no")
-    command2 = os.system("net use Z: \\\\MASTERS\\informes /persistent:no")
-    if (command1 | command2) == 2:
+    try:
+        command1 = os.system("net use X: \\\\MASTERS\\drivers /persistent:no")
+        command2 = os.system("net use Z: \\\\MASTERS\\informes /persistent:no")
+        if (command1 | command2) == 0:
+            output.insert(END, "\n ######## COMPLETADO ########", "success")
+        elif (command1 | command2) != 0:
+             raise Exception()
+    except:
         output.insert(END, "\n No se puede conectar con el servidor, o las unidades ya estan mapeadas...", "fail")
-    elif (command1 | command2) == 0:
-        output.insert(END, "\n ######## COMPLETADO ########", "success")
-
 #Create a button to call map_network_drives
 map_network_drives_button = Button(submenu_frame, text="Mapear unidades", command=map_network_drives)
 map_network_drives_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
@@ -190,17 +190,19 @@ This section create a button to call a function that unmap network drives
 """
 # This function umap network drives
 def unmap_network_drives():
-    # Cambia el titulo del log
     log_mode()
-    # Cambia el contenido del log y ejecuta comandos
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
     output.insert(END, " Desmapeando unidades de red...\n")
-    command = os.system("net use * /delete /y")
-    if command == 0:
-        output.insert(END, "\n ######## COMPLETADO ########", "success")
-        
+    try:
+        command = os.system("net use * /delete /y")
+        if command == 0:
+            output.insert(END, "\n ######## COMPLETADO ########", "success")
+        elif command != 0:
+            raise Exception()
+    except:
+        output.insert(END, "\n No se puede desmapear las unidades de red...", "fail")
 #Create a button to call map_network_drives
 unmap_network_drives_button = Button(submenu_frame, text="Desmapear unidades", command=unmap_network_drives)
 unmap_network_drives_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
@@ -212,13 +214,37 @@ This section create a button to call a function that update system time
 """
 # This function update system time
 def update_sys_time():
-    # Cambia el titulo del log
     log_mode()
-    # Cambia el contenido del log y ejecuta comandos
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
-    output.insert(END, " ACTUALIZAR LA HORA DEL SISTEMA\n")
+    output.insert(END, " Actualizando la Hora del Sistema...\n")
+    try:
+        try:
+            output.insert(END, "\n Comprobando si el servicio de tiempo esta iniciado...", "warning")
+            command1 = os.system("net start w32time")
+            if command1 == 0:
+                pass
+            else:
+                raise Exception()
+        except:
+            output.insert(END, "\n No se puede comprobar si el servicio de tiempo se puede iniciar...", "fail")
+        try:
+            output.insert(END, "\n Sincronizando hora con el servidor time.windows.com...", "warning")
+            command2 = os.system("w32tm /resync")
+            if command2 == 0:
+                pass
+            else:
+                raise Exception()
+        except:
+            output.insert(END, "\n No se puede sincronizar la hora con el servidor...", "fail")
+
+        if (command1 | command2) == 0:
+            output.insert(END, "\n\n ######## COMPLETADO ########", "success")
+        elif (command1 | command2) != 0:
+             raise Exception()
+    except:
+        output.insert(END, "\n\n No se puede actualizar la hora del sistema", "fail")
 #Create a button to call map_network_drives
 update_sys_time_button = Button(submenu_frame, text="Actualizar Hora", command=update_sys_time)
 update_sys_time_button.config(width=20, height=2, bg="#EFA554", highlightthickness=0, activebackground='#FFB86C', cursor="center_ptr")
@@ -230,13 +256,11 @@ This section create a button to call a function that open install system updates
 """
 # This function call wumpt to update system
 def update_sys():
-    # Cambia el titulo del log
     log_mode()
-    # Cambia el contenido del log y ejecuta comandos
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
-    output.insert(END, " ACTUALIZAR EL SISTEMA\n")
+    output.insert(END, " Actualizando el sistema...\n")
 #Create a button to call map_network_drives
 update_sys_button = Button(submenu_frame, text="Actualizar el sistema", command=update_sys)
 update_sys_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
@@ -246,11 +270,9 @@ update_sys_button.place(x=20, y=180)
 This section create a button to call a function that open device manager
 @mca 16/07/2021
 """
-# This function open the device manager in order to install drivers if necessary
+# This function open the activation wizard
 def activate_sys():
-    # Cambia el titulo del log
     log_mode()
-    # Cambia el contenido del log y ejecuta comandos
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
@@ -266,9 +288,7 @@ This section create a button to call a function that open device manager
 """
 # This function open the device manager in order to install drivers if necessary
 def open_device_manager():
-    # Cambia el titulo del log
     log_mode()
-    # Cambia el contenido del log y ejecuta comandos
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
@@ -284,9 +304,7 @@ This section create a button to call a function that open disk manager
 """
 # This function open the disk manager
 def open_disk_manager():
-    # Cambia el titulo del log
     log_mode()
-    # Cambia el contenido del log y ejecuta comandos
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
@@ -302,9 +320,7 @@ This section create a button to call a function that open BIT
 """
 # This function open the BIT
 def bit():
-    # Cambia el titulo del log
     log_mode()
-    # Cambia el contenido del log y ejecuta comandos
     output.config(state=NORMAL)
     output.delete('1.0', END)
     output.insert(END, "\n")
