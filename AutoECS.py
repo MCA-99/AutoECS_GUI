@@ -202,7 +202,7 @@ def map_network_drives():
 #Create a button to call map_network_drives
 map_network_drives_button = Button(submenu_frame, text="Mapear unidades", command=map_network_drives)
 map_network_drives_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
-map_network_drives_button.place(x=20, y=12)
+map_network_drives_button.place(x=40, y=12)
 
 """
 This section create a button to call a function that unmap network drives
@@ -227,7 +227,7 @@ def unmap_network_drives():
 #Create a button to call map_network_drives
 unmap_network_drives_button = Button(submenu_frame, text="Desmapear unidades", command=unmap_network_drives)
 unmap_network_drives_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
-unmap_network_drives_button.place(x=20, y=68)
+unmap_network_drives_button.place(x=40, y=68)
 
 """
 This section create a button to call a function that update system time
@@ -271,7 +271,7 @@ def update_sys_time():
 #Create a button to call map_network_drives
 update_sys_time_button = Button(submenu_frame, text="Actualizar Hora", command=update_sys_time)
 update_sys_time_button.config(width=20, height=2, bg="#EFA554", highlightthickness=0, activebackground='#FFB86C', cursor="center_ptr")
-update_sys_time_button.place(x=20, y=124)
+update_sys_time_button.place(x=40, y=124)
 
 """
 This section create a button to call a function that open install system updates
@@ -326,7 +326,7 @@ def update_sys():
 #Create a button to call map_network_drives
 update_sys_button = Button(submenu_frame, text="Actualizar el sistema", command=update_sys)
 update_sys_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
-update_sys_button.place(x=20, y=180)
+update_sys_button.place(x=40, y=180)
 
 """
 This section create a button to call a function that open device manager
@@ -351,7 +351,7 @@ def activate_sys():
 #Create a button to call map_network_drives
 activate_sys_button = Button(submenu_frame, text="Activar el sistema", command=activate_sys)
 activate_sys_button.config(width=20, height=2, bg="#5473d6", highlightthickness=0, activebackground='#788ed6', cursor="center_ptr")
-activate_sys_button.place(x=20, y=236)
+activate_sys_button.place(x=40, y=236)
 
 """
 This section create a button to call a function that open device manager
